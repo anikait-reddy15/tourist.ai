@@ -12,13 +12,13 @@ def get_gemini_response(question):
     response=model.generate_content(question)
     return response
 
-#initialize our streamlit app
+'''#initialize our streamlit app
 st.set_page_config(page_title="Question and Answer Demo") #title of the streamlit app
 
 st.header("Tourist AI") #header of app
 
 #input=st.text_input('Enter your question: ',key='input') #taking input from user
-#submit = st.button("Ask the question") #submit button
+#submit = st.button("Ask the question") #submit button'''
 
 '''if submit:
     response = get_gemini_response(input)
