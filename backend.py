@@ -29,3 +29,4 @@ inp = input("Enter question : ")
 if inp:
     response = get_gemini_response(inp)
     print(response)
+    
