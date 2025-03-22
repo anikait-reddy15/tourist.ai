@@ -1,32 +1,35 @@
 from dotenv import load_dotenv
-load_dotenv()  
+load_dotenv()
 
 import streamlit as st
 import google.generativeai as genai
+import json
 
-genai.configure(api_key = "AIzaSyCWuCdqFk8bcpRa7xs-E9jGvij71TWH22A")
+genai.configure(api_key="AIzaSyCWuCdqFk8bcpRa7xs-E9jGvij71TWH22A")
 
-#function to load Gemini Pro model and get responses
-model = genai.GenerativeModel("gemini-pro")
+# function to load Gemini Pro model and get responses
+model = genai.GenerativeModel("gemini-2.0-flash")
+
 def get_gemini_response(question):
-    response=model.generate_content(question)
+    response = model.generate_content(question)
     return response
 
-'''#initialize our streamlit app
-st.set_page_config(page_title="Question and Answer Demo") #title of the streamlit app
-
-st.header("Tourist AI") #header of app
-
-#input=st.text_input('Enter your question: ',key='input') #taking input from user
-#submit = st.button("Ask the question") #submit button'''
-
-'''if submit:
-    response = get_gemini_response(input)
-    st.subheader("The response is ")
-    st.write(response)'''
-
-inp = input("Enter question : ")
+inp = input("Enter question: ")
 if inp:
-    response = get_gemini_response(inp)
-    print(response)
-    
+    # Modify the prompt to request JSON output
+    prompt = f"{inp} Provide the destination, budget, and number of days in JSON format: {{'destination': '...', 'budget': '...', 'days': '...'}}."
+    response = get_gemini_response(prompt)
+    try:
+        data = json.loads(response.text)
+        dest = data["destination"]
+        budget = data["budget"]
+        days = data["days"]
+        print(f"Destination: {dest}")
+        print(f"Budget: {budget}")
+        print(f"Days: {days}")
+    except json.JSONDecodeError:
+        print("Error: Gemini's output was not in JSON format.")
+        print("Gemini's output: ", response.text) #Print Gemini's output to help debugging.
+    except KeyError:
+        print("Error: one of the expected keys was not found in the JSON output.")
+        print("Gemini's output: ", response.text) #Print Gemini's output to help debugging.
