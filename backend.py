@@ -19,17 +19,11 @@ if inp:
     # Modify the prompt to request JSON output
     prompt = f"{inp} Provide the destination, budget, and number of days in JSON format: {{'destination': '...', 'budget': '...', 'days': '...'}}."
     response = get_gemini_response(prompt)
-    try:
-        data = json.loads(response.text)
-        dest = data["destination"]
-        budget = data["budget"]
-        days = data["days"]
-        print(f"Destination: {dest}")
-        print(f"Budget: {budget}")
-        print(f"Days: {days}")
-    except json.JSONDecodeError:
-        print("Error: Gemini's output was not in JSON format.")
-        print("Gemini's output: ", response.text) #Print Gemini's output to help debugging.
-    except KeyError:
-        print("Error: one of the expected keys was not found in the JSON output.")
-        print("Gemini's output: ", response.text) #Print Gemini's output to help debugging.
+
+data = json.loads(response.text)
+dest = data["destination"]
+budget = data["budget"]
+days = data["days"]
+print(f"Destination: {dest}")
+print(f"Budget: {budget}")
+print(f"Days: {days}")
